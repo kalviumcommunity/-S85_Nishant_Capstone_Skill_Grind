@@ -20,3 +20,4 @@ err.statusCode = err.statusCode || 500;
         message: err.message,
     });
 }
+module.exports = ErrorHandler;
