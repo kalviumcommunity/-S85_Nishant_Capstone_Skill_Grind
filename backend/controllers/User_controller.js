@@ -1,6 +1,11 @@
 import User from "../models/User.js"
 import ErrorHandler from "./ErrorHandles.js";
 import { CatchAsyncError } from "../middleware/catchAsyncErrors.js";
+import { updateUserByIdService, updateUserPasswordService } from "../services/update.services.js";
+
+
+
+// Register User Controller
 export const registerUser = CatchAsyncError(async (req, res, next) => {
     try {
         const { name, email, password, avatar } = req.body;
@@ -123,3 +128,31 @@ export const getUserInfo = CatchAsyncError(async (req, res, next) => {
         return next(new ErrorHandler(error.message, 400));
     }
 }); 
+
+
+//update user info
+export const updateUserById = CatchAsyncError(async (req, res, next) => {
+    const userId = req.params.id;
+    const user = await updateUserByIdService(userId, req.body);
+
+    res.status(200).json({
+        success: true,
+        message: "User updated successfully",
+        user,
+    });
+});
+
+
+//update user password
+export const updateUserPassword = CatchAsyncError(async (req, res, next) => {
+    const { oldPassword, newPassword } = req.body;
+    const { id } = req.params;
+
+    const user = await updateUserPasswordService(id, oldPassword, newPassword);
+
+    res.status(200).json({
+        success: true,
+        message: "Password updated successfully",
+        user,
+    });
+});
