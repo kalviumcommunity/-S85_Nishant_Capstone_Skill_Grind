@@ -10,6 +10,15 @@ export const registerUser = CatchAsyncError(async (req, res, next) => {
         if (isEmailExist) {
             return next(new ErrorHandler("Email already exists", 400));
         }
+            // Avatar validation
+    if (
+        !avatar ||
+        !avatar.public_id ||
+        !avatar.url
+      ) {
+        return res.status(400).json({ message: "Avatar is required." });
+      }
+  
 
         // Create user
         const newUser = await User.create({ // Changed userModel to User
