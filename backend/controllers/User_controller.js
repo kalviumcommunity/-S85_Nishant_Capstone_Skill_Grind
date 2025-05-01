@@ -85,3 +85,41 @@ export const loginUser = CatchAsyncError(async (req, res, next) => {
         return next(new ErrorHandler(error.message, 400));
     }
 });
+
+
+// Logout User Controller
+export const logoutUser = CatchAsyncError(async (req, res, next) => {
+    res.status(200).json({
+        success: true,
+        message: "Logged out successfully (client-side only)",
+    });
+});
+
+
+// get user info
+export const getUserInfo = CatchAsyncError(async (req, res, next) => {
+    try {
+        const userId = req.user._id; // Assuming req.user is set by authentication middleware
+
+        // Find user by ID
+        const user = await User.findById(userId); // Changed userModel to User
+        if (!user) {
+            return next(new ErrorHandler("User not found", 404));
+        }
+
+        // Send success response
+        res.status(200).json({
+            success: true,
+            user: {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                isVerified: user.isVerified,
+                role: user.role,
+                avatar: user.avatar,
+            },
+        });
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 400));
+    }
+}); 
