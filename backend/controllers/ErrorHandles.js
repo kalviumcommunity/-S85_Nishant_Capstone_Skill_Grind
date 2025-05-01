@@ -1,14 +1,15 @@
-class ErrorHandler extends Error {
+// This code defines a custom error handler class in JavaScript.
+export class ErrorHandler extends Error {
     constructor(message, statusCode) {
-        super(message);
-        this.statusCode = statusCode;
-
-        // Captures the current stack trace and excludes constructor from it
-        Error.captureStackTrace(this, this.constructor);
+      super(message);
+      this.statusCode = statusCode;
+      Error.captureStackTrace(this, this.constructor);
     }
-}
+  }
 
-module.exports = ErrorHandler;
+  export default ErrorHandler;
+
+  
 
 
     // A custom error handler class extends the built-in Error class 
