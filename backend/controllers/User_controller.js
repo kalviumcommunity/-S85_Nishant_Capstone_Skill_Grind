@@ -91,7 +91,7 @@ export const loginUser = CatchAsyncError(async (req, res, next) => {
 export const logoutUser = CatchAsyncError(async (req, res, next) => {
     res.status(200).json({
         success: true,
-        message: "Logged out successfully (client-side only)",
+        message: "Logged out successfully",
     });
 });
 
