@@ -3,4 +3,4 @@ export const CatchAsyncError= (fn) => (req, res, next) => {
         next(error);
     });
 }
-module.exports = ErrorHandler;
+// module.exports = ErrorHandler;

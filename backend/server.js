@@ -1,13 +1,14 @@
-import { connect } from "http2";
-import { app } from "./app.js";
+import app from "./app.js"; // ✅ now using default import
 import dotenv from 'dotenv';
 import connectDB from "./config/db.js";
+import User from "./models/User.js";
+
 dotenv.config();
 
+const PORT = process.env.PORT || 5000;
 
-
-//Create a server
-app.listen(process.env.PORT, () =>{
-    console.log(`Server is connected with http://localhost:${process.env.PORT}`)
-    connectDB();
-})
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log(`Server running on http://localhost:${PORT}`);
+    });
+});
