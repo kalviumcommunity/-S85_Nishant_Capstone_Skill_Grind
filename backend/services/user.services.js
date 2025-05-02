@@ -1,5 +1,5 @@
 import { CatchAsyncError } from "../middleware/catchAsyncErrors.js";
-import ErrorHandler from "../controllers/ErrorHandles.js";
+import ErrorHandler from "../middleware/ErrorHandles.js";
 import User from "../models/User.js"; 
 
 export const getUserById = CatchAsyncError(async (req, res, next) => {

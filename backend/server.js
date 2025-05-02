@@ -1,7 +1,6 @@
 import app from "./app.js"; // ✅ now using default import
 import dotenv from 'dotenv';
 import connectDB from "./config/db.js";
-import User from "./models/User.js";
 
 dotenv.config();
 

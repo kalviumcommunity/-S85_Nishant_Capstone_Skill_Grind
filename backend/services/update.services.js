@@ -1,5 +1,5 @@
 import User from "../models/User.js";
-import ErrorHandler from "../controllers/ErrorHandles.js";
+import ErrorHandler from "../middleware/ErrorHandles.js";
 import mongoose from "mongoose";
 export const updateUserByIdService = async (id, data) => {
     const { name, email, avatar } = data;

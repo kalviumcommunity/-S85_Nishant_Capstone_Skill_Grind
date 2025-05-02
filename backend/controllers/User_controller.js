@@ -1,5 +1,5 @@
 import User from "../models/User.js"
-import ErrorHandler from "./ErrorHandles.js";
+import ErrorHandler from "../middleware/ErrorHandles.js";
 import { CatchAsyncError } from "../middleware/catchAsyncErrors.js";
 import { updateUserByIdService, updateUserPasswordService } from "../services/update.services.js";
 
