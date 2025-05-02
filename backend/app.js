@@ -26,7 +26,7 @@ app.use('/api/levels', levelRoutes);// level routes
 app.use('/api/videos', videoRoutes);   // video routes
 
 // Test route
-app.get("/test", (req, res) => {
+app.get("/", (req, res) => {
     res.status(200).json({
         success: true,
         message: "API is working fine",
