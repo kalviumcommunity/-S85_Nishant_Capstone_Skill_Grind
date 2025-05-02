@@ -1,35 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react';
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
+    <div style={styles.container}>
+      <h1 style={styles.heading}>📚 Welcome to SkillGrind</h1>
+      <p style={styles.description}>
+        A platform to choose your language, pick your learning level, and watch curated YouTube tutorials.
       </p>
-    </>
-  )
-}
+      <p style={styles.info}>Coming soon: Login, Course Selection, Level Modules, and Video Learning!</p>
+    </div>
+  );
+};
 
-export default App
+const styles = {
+  container: {
+    fontFamily: 'Arial, sans-serif',
+    padding: '2rem',
+    textAlign: 'center',
+    backgroundColor: '#f4f4f4',
+    height: '100vh',
+  },
+  heading: {
+    color: '#333',
+    fontSize: '2.5rem',
+  },
+  description: {
+    fontSize: '1.2rem',
+    marginTop: '1rem',
+  },
+  info: {
+    marginTop: '2rem',
+    fontStyle: 'italic',
+    color: '#777',
+  },
+};
+
+export default App;
