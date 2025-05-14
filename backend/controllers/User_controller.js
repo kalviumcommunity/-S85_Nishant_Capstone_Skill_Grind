@@ -2,56 +2,51 @@ import User from "../models/User.js"
 import ErrorHandler from "../middleware/ErrorHandles.js";
 import { CatchAsyncError } from "../middleware/catchAsyncErrors.js";
 import { updateUserByIdService, updateUserPasswordService } from "../services/update.services.js";
-
-
+import { sendToken } from "../utils/sendtokens.js";
+import jwt from "jsonwebtoken"; 
 
 // Register User Controller
 export const registerUser = CatchAsyncError(async (req, res, next) => {
-    try {
-        const { name, email, password, avatar } = req.body;
+    const { name, email, password, avatar } = req.body;
 
-        // Check if user already exists
-        const isEmailExist = await User.findOne({ email }); // Changed userModel to User
-        if (isEmailExist) {
-            return next(new ErrorHandler("Email already exists", 400));
-        }
-            // Avatar validation
-    if (
-        !avatar ||
-        !avatar.public_id ||
-        !avatar.url
-      ) {
-        return res.status(400).json({ message: "Avatar is required." });
-      }
-  
-
-        // Create user
-        const newUser = await User.create({ // Changed userModel to User
-            name,
-            email,
-            password,
-            avatar,
-        });
-
-        // Send success response
-        res.status(201).json({
-            success: true,
-            message: "User registered successfully",
-            user: {
-                _id: newUser._id,
-                name: newUser.name,
-                email: newUser.email,
-                isVerified: newUser.isVerified,
-                role: newUser.role,
-                avatar: newUser.avatar,
-            },
-        });
-    } catch (error) {
-        return next(new ErrorHandler(error.message, 400));
+    // ✅ Check if email already exists
+    const isEmailExist = await User.findOne({ email });
+    if (isEmailExist) {
+        return next(new ErrorHandler("Email already exists", 400));
     }
+
+    // ✅ Validate avatar object
+    if (!avatar || !avatar.public_id || !avatar.url) {
+        return res.status(400).json({ message: "Avatar is required." });
+    }
+
+    // ✅ Create new user
+    const newUser = await User.create({
+        name,
+        email,
+        password,
+        avatar,
+    });
+
+    // ✅ Generate JWT Token using method defined in schema
+    const token = newUser.generateToken();
+
+    // ✅ Send response with token and user info
+    res.status(201).json({
+        success: true,
+        message: "User registered successfully",
+        token,
+        user: {
+            _id: newUser._id,
+            name: newUser.name,
+            email: newUser.email,
+            isVerified: newUser.isVerified,
+            role: newUser.role,
+            avatar: newUser.avatar,
+        },
+    });
 });
 
-// Login User Controller
 export const loginUser = CatchAsyncError(async (req, res, next) => {
     try {
         const { email, password } = req.body;
@@ -62,7 +57,7 @@ export const loginUser = CatchAsyncError(async (req, res, next) => {
         }
 
         // Check if user exists
-        const user = await User.findOne({ email }).select("+password"); // Changed userModel to User
+        const user = await User.findOne({ email }).select("+password");
         if (!user) {
             return next(new ErrorHandler("Invalid email or password", 401));
         }
@@ -73,10 +68,14 @@ export const loginUser = CatchAsyncError(async (req, res, next) => {
             return next(new ErrorHandler("Invalid email or password", 401));
         }
 
-        // Send success response
+        // Generate JWT token
+        const token = sendToken(user);
+
+        // Send success response with token
         res.status(200).json({
             success: true,
             message: "User logged in successfully",
+            token, // Send the token in the response
             user: {
                 _id: user._id,
                 name: user.name,
@@ -90,7 +89,6 @@ export const loginUser = CatchAsyncError(async (req, res, next) => {
         return next(new ErrorHandler(error.message, 400));
     }
 });
-
 
 // Logout User Controller
 export const logoutUser = CatchAsyncError(async (req, res, next) => {
